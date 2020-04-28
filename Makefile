@@ -16,17 +16,16 @@ default:
 	@echo "	removes all temporary files and build artifacts"
 
 
-build: gobuild dockbuild
+build: gobuild docker-build
 
-dockbuild:
-	[ -e ca-certificates.crt ] || wget https://curl.haxx.se/ca/cacert.pem -O ca-certificates.crt
+docker-build:
 	docker build -t ${registry}/${name}:${tag} .
 
-docker-push: dockbuild
+docker-push: docker-build
 	docker push ${registry}/${name}:${tag}
 
 gobuild:
-	go build -o aws-signing-proxy main.go
+	GOOS=linux go build -a -o aws-signing-proxy main.go
 
 clean:
 	rm -rf ./_* ca-certificates.crt aws-signing-proxy
