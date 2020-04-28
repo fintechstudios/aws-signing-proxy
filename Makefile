@@ -1,6 +1,6 @@
 name=aws-signing-proxy
-registry=cllunsford
-gitrepo=github.com/cllunsford
+registry=fintechstudios
+gitrepo=github.com/fintechstudios/aws-signing-proxy
 tag=latest
 go_ver=1.10
 
@@ -21,6 +21,9 @@ build: gobuild dockbuild
 dockbuild:
 	[ -e ca-certificates.crt ] || wget https://curl.haxx.se/ca/cacert.pem -O ca-certificates.crt
 	docker build -t ${registry}/${name}:${tag} .
+
+docker-push: dockbuild
+	docker push ${registry}/${name}:${tag}
 
 gobuild:
 	# copy src
