@@ -2,7 +2,7 @@ name=aws-signing-proxy
 registry=fintechstudios
 gitrepo=github.com/fintechstudios/aws-signing-proxy
 tag=latest
-go_ver=1.10
+go_ver=1.14
 
 default:
 	@echo ""
@@ -26,19 +26,7 @@ docker-push: dockbuild
 	docker push ${registry}/${name}:${tag}
 
 gobuild:
-	# copy src
-	mkdir -p _src/${gitrepo}/${name}
-	cp -r main.go _src/${gitrepo}/${name}
-	# compile
-	docker run \
-	-v `pwd`/_pkg:/go/pkg \
-	-v `pwd`/_bin:/go/bin \
-	-v `pwd`/_src:/go/src \
-	-e CGO_ENABLED=0 \
-	-e GOOS=linux  \
-	golang:${go_ver} \
-	bash -c "go get ./src/${gitrepo}/${name}/...; chown -R $$(id -u):$$(id -g) ./"
-	ln -f _bin/aws-signing-proxy
+	go build -o aws-signing-proxy main.go
 
 clean:
 	rm -rf ./_* ca-certificates.crt aws-signing-proxy
