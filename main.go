@@ -218,6 +218,6 @@ func main() {
 	listenString := fmt.Sprintf(":%v", *portFlag)
 	fmt.Printf("Listening on %v\n", listenString)
 	if err := http.ListenAndServe(listenString, proxy); err != nil {
-		panic(err)
+		log.Fatal(err.Error())
 	}
 }
